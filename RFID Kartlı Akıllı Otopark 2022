@@ -1,0 +1,130 @@
+#include <SPI.h>
+#include <MFRC522.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+
+#define RC522_SS_PIN  53 
+#define RC522_RST_PIN 5
+
+
+
+MFRC522 rfid(RC522_SS_PIN, RC522_RST_PIN); 
+MFRC522::MIFARE_Key key;
+String kart1 = "0192031053050"; //
+String kart2 = "01150860196017"; //
+String kart3 = "0510390186017"; //
+String kart4 = "016301430204017"; //
+String kart5 = "01310440188017"; //
+String kart6 = "021101810129019"; //
+
+
+
+
+
+
+void setup() 
+{
+  lcd.init();
+  lcd.backlight();
+   lcd.begin(16,2);
+  Serial.begin(115200);
+  SPI.begin(); 
+  rfid.PCD_Init(); 
+
+  lcd.setCursor(1, 0);
+  lcd.print("KATLI OTOPARK");
+  lcd.setCursor(2, 1);
+  lcd.print("HOSGELDiNiZ");
+}
+
+void loop ()
+{
+    okuma ();
+    
+}
+
+void okuma()
+{
+  
+  // Look for new cards
+  if ( ! rfid.PICC_IsNewCardPresent())
+    return;
+
+  // Verify if the NUID has been readed
+  if ( ! rfid.PICC_ReadCardSerial())
+    return;
+
+  String kart = "";
+  for (byte i = 0; i < rfid.uid.size; i++)
+  {
+    kart += rfid.uid.uidByte[i] < 0x10;
+    kart += String(rfid.uid.uidByte[i], DEC);
+  }
+  Serial.println(kart);
+if (kart == kart1)
+  {
+  Serial.println("1.Arac");
+  lcd.setCursor(0, 0);
+  lcd.print("   1.Numarali   ");
+  lcd.setCursor(0, 1);
+  lcd.print("   Arac Geldi    ");
+  
+  } 
+else
+lcd.clear();
+if (kart == kart2)
+  {
+  Serial.println("2.Arac");
+  lcd.setCursor(0, 0);
+  lcd.print("   2.Numarali   ");
+  lcd.setCursor(0, 1);
+  lcd.print("   Arac Geldi    ");
+  
+  }
+
+
+if (kart == kart3)
+  {
+  Serial.println("3.Arac");
+  lcd.setCursor(0, 0);
+  lcd.print("   3.Numarali   ");
+  lcd.setCursor(0, 1);
+  lcd.print("   Arac Geldi    ");
+  
+}
+
+
+if (kart == kart4)
+  {
+  Serial.println("4.Arac");
+  lcd.setCursor(0, 0);
+  lcd.print("   4.Numarali   ");
+  lcd.setCursor(0, 1);
+  lcd.print("   Arac Geldi    ");
+  
+}
+
+
+if (kart == kart5)
+  {
+  lcd.setCursor(0, 0);
+  lcd.print("   5.Numarali   ");
+  lcd.setCursor(0, 1);
+  lcd.print("   Arac Geldi    ");
+  Serial.println("5.Arac");
+  }
+
+
+if (kart == kart6)
+  {
+  lcd.setCursor(0, 0);
+  lcd.print("   6.Numarali   ");
+  lcd.setCursor(0, 1);
+  lcd.print("   Arac Geldi    ");
+  Serial.println("6.Arac");
+  }
+
+
+}
